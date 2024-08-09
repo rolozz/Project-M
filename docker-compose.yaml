@@ -1,0 +1,19 @@
+version: '3.9'
+
+#AuthServer
+services:
+  AuthServerDB:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      'POSTGRES_DB': auth
+      'POSTGRES_USER': root
+      'POSTGRES_PASSWORD': root
+  AuthServerRedis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+
