@@ -12,6 +12,6 @@ public interface AuthService extends UserDetailsService {
 
     Person authenticateUser(RequestDto requestDto);
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
 }

@@ -10,7 +10,7 @@ spring:
       host: localhost
       port: 6379
 server:
-  port: 8081
+  port: 8082
 
 eureka:
   client:

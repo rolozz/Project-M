@@ -1,7 +1,6 @@
 package com.java.project.authserver.jwt;
 
 import com.java.project.authserver.services.AuthService;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,10 +42,8 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            try {
+            if (jwtUtil.validateToken(jwt)) {
                 username = jwtUtil.extractUsername(jwt);
-            } catch (ExpiredJwtException e) {
-                log.debug("просрочка");
             }
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

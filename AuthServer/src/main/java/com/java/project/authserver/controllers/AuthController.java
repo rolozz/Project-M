@@ -3,6 +3,7 @@ package com.java.project.authserver.controllers;
 import com.java.project.authserver.dto.RequestDto;
 import com.java.project.authserver.jwt.JwtUtil;
 import com.java.project.authserver.services.AuthService;
+import com.java.project.authserver.services.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,22 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
+    private final RedisService redisService;
 
     @Autowired
-    public AuthController(JwtUtil jwtUtil, AuthService authService, AuthenticationManager authenticationManager) {
+    public AuthController(JwtUtil jwtUtil, AuthService authService, AuthenticationManager authenticationManager, RedisService redisService) {
         this.jwtUtil = jwtUtil;
         this.authService = authService;
         this.authenticationManager = authenticationManager;
+        this.redisService = redisService;
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/redis-test")
+    public String testRedis(){
+        redisService.saveValue("testKey", "пусть это будет тут");
+        String string = redisService.getValue("testKey");
+        return "рэдис: " + string;
     }
 
     @PreAuthorize("hasRole('USER')")
