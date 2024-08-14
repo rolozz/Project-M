@@ -1,64 +1,77 @@
 package com.java.project.authserver.services.impl;
 
+import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.entities.Person;
+import com.java.project.authserver.entities.Role;
+import com.java.project.authserver.repositories.PersonRepository;
+import com.java.project.authserver.repositories.RoleRepository;
 import com.java.project.authserver.services.AuthService;
-import com.java.project.authserver.services.PersonService;
-import com.java.project.authserver.services.RedisService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthenticationManager authenticationManager;
-    private final RedisService redisService;
-    private final PersonService personService;
+    private final PersonRepository personRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    //private final JwtUtil jwtUtil;
 
-
-    private String jwtSecret = "3sR0w8QwX7I5O4U6K1L4V3N2M8T2Y9Q1R2F5G7H1K3J5L0P9S2W7Q8N5R4M3J2";
-    private long jwtExpiration = 3600000;
-
-    public AuthServiceImpl(AuthenticationManager authenticationManager, RedisService redisService, PersonService personService) {
-        this.authenticationManager = authenticationManager;
-        this.redisService = redisService;
-        this.personService = personService;
+    @Autowired
+    public AuthServiceImpl(PersonRepository personRepository, @Lazy PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+        this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        //this.jwtUtil = jwtUtil;
     }
 
-    public String authenticate(String login, String password) throws AuthenticationException {
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-            return generateToken(authentication);
-        } catch (AuthenticationException e) {
-            // Логируем исключение
-            log.error("Authentication failed: ", e);
-            throw e;
+    @Override
+    @Transactional
+    public void register(RequestDto requestDto) {
+        final Person newPerson = new Person();
+        newPerson.setUsername(requestDto.getUsername());
+        log.info(newPerson.getUsername());
+        newPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        newPerson.setRole(roleRepository.findRoleByName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("role not found")));
+        personRepository.save(newPerson);
+    }
+
+    @Override
+    @Transactional
+    public Person authenticateUser(RequestDto requestDto) {
+        final Person authPerson = personRepository.findByUsername(requestDto.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("username not found" + requestDto.getUsername()));
+        if (!passwordEncoder.matches(requestDto.getPassword(), authPerson.getPassword())) {
+            throw new BadCredentialsException("invalid password");
         }
+        return authPerson;
     }
 
-    public String generateToken(Authentication authentication) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", authentication.getName());
-        claims.put("roles", authentication.getAuthorities());
-
-        String jwtToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(SignatureAlgorithm.HS256, jwtSecret.getBytes())
-                .compact();
-
-        redisService.storeToken(authentication.getName(), jwtToken);
-
-        return jwtToken;
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        final Person person = personRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("username not found" + username));
+        Role role = person.getRole();
+        GrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+        return new org.springframework.security.core.userdetails.User(
+                person.getUsername(),
+                person.getPassword(),
+                Collections.singletonList(authority)
+        );
     }
 }
+

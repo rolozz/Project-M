@@ -1,52 +1,61 @@
 package com.java.project.authserver.controllers;
 
-import com.java.project.authserver.dto.LoginRequest;
-import com.java.project.authserver.entities.Person;
+import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.jwt.JwtUtil;
 import com.java.project.authserver.services.AuthService;
-import com.java.project.authserver.services.PersonService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 
-@Slf4j
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthController {
 
-    private final AuthService authenticationService;
-    private final PersonService personService;
+    private final JwtUtil jwtUtil;
+    private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthController(AuthService authenticationService, PersonService personService) {
-        this.authenticationService = authenticationService;
-        this.personService = personService;
+    @Autowired
+    public AuthController(JwtUtil jwtUtil, AuthService authService, AuthenticationManager authenticationManager) {
+        this.jwtUtil = jwtUtil;
+        this.authService = authService;
+        this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            String token = authenticationService.authenticate(loginRequest.getLogin(), loginRequest.getPassword());
-            return ResponseEntity.ok(token);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login or password");
-        }
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/security-test")
+    public String test() {
+        return "privet, dubolom!!!";
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody Person person) {
+    public ResponseEntity<String> register(@RequestBody RequestDto requestDto) {
+        System.out.println("Register endpoint called");
+        authService.register(requestDto);
+        return ResponseEntity.ok("You Are Welcome!!!");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody RequestDto requestDto) {
         try {
-            personService.register(person);
-            return ResponseEntity.ok("User registered successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed");
+            authenticationManager.authenticate
+                    (new UsernamePasswordAuthenticationToken(
+                            requestDto.getUsername(),
+                            requestDto.getPassword())
+                    );
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        return ResponseEntity.ok(jwtUtil.generateToken(authService.authenticateUser(requestDto)));
     }
 }

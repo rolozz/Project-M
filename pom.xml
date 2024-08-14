@@ -18,7 +18,6 @@
 
   <modules>
     <module>EurekaServer</module>
-    <module>RelationService</module>
     <module>AuthServer</module>
   </modules>
 

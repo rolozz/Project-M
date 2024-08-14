@@ -1,11 +1,17 @@
 package com.java.project.authserver.services;
 
-import org.springframework.security.core.Authentication;
+import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.entities.Person;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public interface AuthService {
+public interface AuthService extends UserDetailsService {
 
-    String authenticate(String login, String password);
+    void register(RequestDto requestDto);
 
-    String generateToken(Authentication authentication);
+    Person authenticateUser(RequestDto requestDto);
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
 }

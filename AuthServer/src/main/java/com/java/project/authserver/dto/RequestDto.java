@@ -9,9 +9,9 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString
-public class LoginRequest {
+public class RequestDto {
 
-    private String login;
+    private String username;
     private String password;
 
 }
