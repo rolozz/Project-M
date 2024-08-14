@@ -1,6 +1,5 @@
 package com.java.project.authserver.jwt;
 
-import com.java.project.authserver.services.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,12 +21,10 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final AuthService authService;
 
     @Autowired
-    public JwtFilter(JwtUtil jwtUtil, AuthService authService) {
+    public JwtFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-        this.authService = authService;
     }
 
     @Override
