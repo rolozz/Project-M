@@ -7,7 +7,6 @@ import com.java.project.authserver.repositories.PersonRepository;
 import com.java.project.authserver.repositories.RoleRepository;
 import com.java.project.authserver.services.AuthService;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
-@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -38,13 +37,19 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void register(RequestDto requestDto) {
-        final Person newPerson = new Person();
-        newPerson.setUsername(requestDto.getUsername());
-        log.info(newPerson.getUsername());
-        newPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        newPerson.setRole(roleRepository.findRoleByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("role not found")));
-        personRepository.save(newPerson);
+        Optional<Person> preReg = personRepository.findByUsername(requestDto.getUsername());
+        if (preReg.isPresent()) {
+            Person updatedPerson = preReg.get();
+            updatedPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+            personRepository.save(updatedPerson);
+        } else {
+            final Person newPerson = new Person();
+            newPerson.setUsername(requestDto.getUsername());
+            newPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+            newPerson.setRole(roleRepository.findRoleByName("ROLE_USER")
+                    .orElseThrow(() -> new RuntimeException("role not found")));
+            personRepository.save(newPerson);
+        }
     }
 
     @Override

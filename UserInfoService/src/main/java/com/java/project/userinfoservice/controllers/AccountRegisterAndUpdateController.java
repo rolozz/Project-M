@@ -1,6 +1,7 @@
 package com.java.project.userinfoservice.controllers;
 
 import com.java.project.userinfoservice.dto.AccountIdDto;
+import com.java.project.userinfoservice.dto.RequestDto;
 import com.java.project.userinfoservice.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,16 @@ public class AccountRegisterAndUpdateController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AccountIdDto accountIdDto) throws IllegalAccessException {
         accountService.save(accountIdDto);
+        RequestDto requestDto = new RequestDto(accountIdDto.getUsername(),accountIdDto.getPassword());
+        accountService.saveBackUp(requestDto);
         return ResponseEntity.ok("Ok");
     }
 
     @PostMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable("id") Long id,@RequestBody AccountIdDto accountIdDto){
         accountService.update(id,accountIdDto);
+        RequestDto requestDto = new RequestDto(accountIdDto.getUsername(),accountIdDto.getPassword());
+        accountService.saveBackUp(requestDto);
         return ResponseEntity.ok("Ok");
     }
 }

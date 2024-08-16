@@ -51,7 +51,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RequestDto requestDto) {
-        System.out.println("Register endpoint called");
         authService.register(requestDto);
         return ResponseEntity.ok("You Are Welcome!!!");
     }
@@ -67,6 +66,8 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.ok(jwtUtil.generateToken(authService.authenticateUser(requestDto)));
+        String token = jwtUtil.generateToken(authService.authenticateUser(requestDto));
+        redisService.saveValue(requestDto.getUsername(), token);
+        return ResponseEntity.ok(token);
     }
 }
