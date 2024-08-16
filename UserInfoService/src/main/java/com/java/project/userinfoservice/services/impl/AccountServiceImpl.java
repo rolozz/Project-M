@@ -2,6 +2,7 @@ package com.java.project.userinfoservice.services.impl;
 
 import com.java.project.userinfoservice.dto.AccountIdDto;
 import com.java.project.userinfoservice.dto.RequestDto;
+import com.java.project.userinfoservice.dto.UpdateDto;
 import com.java.project.userinfoservice.entities.AccountId;
 import com.java.project.userinfoservice.feign.AuthBackUpSave;
 import com.java.project.userinfoservice.mapper.AccountIdMapper;
@@ -11,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -41,15 +41,20 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void update(Long id, AccountIdDto accountIdDto) {
         AccountId accountId = accountIdRepository.findById(id).orElseThrow(() -> (new RuntimeException("not found")));
-        if(accountIdDto.getPassword() != null){
+        if (accountIdDto.getPassword() != null) {
             accountIdDto.setPassword(passwordEncoder.encode(accountIdDto.getPassword()));
         }
         accountIdRepository.save(accountIdMapper.mergeToEntity(accountIdDto, accountId));
     }
 
     @Override
-    public void saveBackUp(RequestDto requestDto){
+    public void saveBackUp(RequestDto requestDto) {
         authBackUpSave.register(requestDto);
+    }
+
+    @Override
+    public void updateBackUp(UpdateDto updateDto) {
+        authBackUpSave.update(updateDto);
     }
 
 }

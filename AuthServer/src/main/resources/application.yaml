@@ -11,6 +11,8 @@ spring:
       port: 6379
 server:
   port: 8082
+  servlet:
+    context-path: /api/auth
 
 eureka:
   client:

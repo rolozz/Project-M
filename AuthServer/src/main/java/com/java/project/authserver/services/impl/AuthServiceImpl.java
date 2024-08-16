@@ -1,6 +1,7 @@
 package com.java.project.authserver.services.impl;
 
 import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.dto.UpdateDto;
 import com.java.project.authserver.entities.Person;
 import com.java.project.authserver.entities.Role;
 import com.java.project.authserver.repositories.PersonRepository;
@@ -61,6 +62,16 @@ public class AuthServiceImpl implements AuthService {
             throw new BadCredentialsException("invalid password");
         }
         return authPerson;
+    }
+
+    @Override
+    @Transactional
+    public void update(UpdateDto updateDto) {
+        Person updatedPerson = personRepository.findByUsername
+                (updateDto.getPreUpdate()).orElseThrow(()-> new RuntimeException("empty"));
+        updatedPerson.setUsername(updateDto.getUpdate());
+        updatedPerson.setPassword(passwordEncoder.encode(updateDto.getPassword()));
+        personRepository.save(updatedPerson);
     }
 
     @Override

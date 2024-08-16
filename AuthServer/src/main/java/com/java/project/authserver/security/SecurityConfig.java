@@ -40,7 +40,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/register", "/api/login").permitAll()
+                        .requestMatchers("/register", "/login","/update").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -12,9 +12,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RequestDto {
+public class UpdateDto {
 
-    String username;
+    String preUpdate;
+    String update;
     String password;
 
 }

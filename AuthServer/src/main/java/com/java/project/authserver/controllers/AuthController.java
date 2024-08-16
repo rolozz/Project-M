@@ -1,6 +1,7 @@
 package com.java.project.authserver.controllers;
 
 import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.dto.UpdateDto;
 import com.java.project.authserver.jwt.JwtUtil;
 import com.java.project.authserver.services.AuthService;
 import com.java.project.authserver.services.RedisService;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
 public class AuthController {
 
     private final JwtUtil jwtUtil;
@@ -37,7 +37,7 @@ public class AuthController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/redis-test")
-    public String testRedis(){
+    public String testRedis() {
         redisService.saveValue("testKey", "пусть это будет тут");
         String string = redisService.getValue("testKey");
         return "рэдис: " + string;
@@ -69,5 +69,11 @@ public class AuthController {
         String token = jwtUtil.generateToken(authService.authenticateUser(requestDto));
         redisService.saveValue(requestDto.getUsername(), token);
         return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody UpdateDto updateDto){
+        authService.update(updateDto);
+        return ResponseEntity.ok("Updated");
     }
 }
