@@ -8,8 +8,10 @@ import com.java.project.userinfoservice.feign.AuthBackUpSave;
 import com.java.project.userinfoservice.mapper.AccountIdMapper;
 import com.java.project.userinfoservice.repositories.AccountIdRepository;
 import com.java.project.userinfoservice.services.AccountService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +58,4 @@ public class AccountServiceImpl implements AccountService {
     public void updateBackUp(UpdateDto updateDto) {
         authBackUpSave.update(updateDto);
     }
-
 }

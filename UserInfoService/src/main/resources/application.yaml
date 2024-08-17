@@ -9,6 +9,10 @@ spring:
     show-sql: true
     properties:
      hibernate.hibernate.format_sql: true
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 server:
   port: 8083
   servlet:
@@ -18,4 +22,5 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
 
