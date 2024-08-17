@@ -1,6 +1,7 @@
 package com.java.project.authserver.services;
 
 import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.dto.UpdateDto;
 import com.java.project.authserver.entities.Person;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,5 +14,7 @@ public interface AuthService extends UserDetailsService {
     Person authenticateUser(RequestDto requestDto);
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+    void update(UpdateDto updateDto);
 
 }

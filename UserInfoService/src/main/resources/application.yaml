@@ -1,0 +1,26 @@
+spring:
+  application:
+   name: UserInfoService
+  datasource:
+     url: jdbc:postgresql://localhost:5447/user
+     username: root
+     password: root
+  jpa:
+    show-sql: true
+    properties:
+     hibernate.hibernate.format_sql: true
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+server:
+  port: 8083
+  servlet:
+    context-path: /api/user
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+

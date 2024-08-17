@@ -1,13 +1,13 @@
 package com.java.project.authserver.services.impl;
 
 import com.java.project.authserver.dto.RequestDto;
+import com.java.project.authserver.dto.UpdateDto;
 import com.java.project.authserver.entities.Person;
 import com.java.project.authserver.entities.Role;
 import com.java.project.authserver.repositories.PersonRepository;
 import com.java.project.authserver.repositories.RoleRepository;
 import com.java.project.authserver.services.AuthService;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,34 +19,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
-@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    //private final JwtUtil jwtUtil;
 
     @Autowired
     public AuthServiceImpl(PersonRepository personRepository, @Lazy PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-        //this.jwtUtil = jwtUtil;
     }
 
     @Override
     @Transactional
     public void register(RequestDto requestDto) {
-        final Person newPerson = new Person();
-        newPerson.setUsername(requestDto.getUsername());
-        log.info(newPerson.getUsername());
-        newPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        newPerson.setRole(roleRepository.findRoleByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("role not found")));
-        personRepository.save(newPerson);
+        Optional<Person> preReg = personRepository.findByUsername(requestDto.getUsername());
+        if (preReg.isPresent()) {
+            Person updatedPerson = preReg.get();
+            updatedPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+            personRepository.save(updatedPerson);
+        } else {
+            final Person newPerson = new Person();
+            newPerson.setUsername(requestDto.getUsername());
+            newPerson.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+            newPerson.setRole(roleRepository.findRoleByName("ROLE_USER")
+                    .orElseThrow(() -> new RuntimeException("role not found")));
+            personRepository.save(newPerson);
+        }
     }
 
     @Override
@@ -58,6 +62,16 @@ public class AuthServiceImpl implements AuthService {
             throw new BadCredentialsException("invalid password");
         }
         return authPerson;
+    }
+
+    @Override
+    @Transactional
+    public void update(UpdateDto updateDto) {
+        Person updatedPerson = personRepository.findByUsername
+                (updateDto.getPreUpdate()).orElseThrow(()-> new RuntimeException("empty"));
+        updatedPerson.setUsername(updateDto.getUpdate());
+        updatedPerson.setPassword(passwordEncoder.encode(updateDto.getPassword()));
+        personRepository.save(updatedPerson);
     }
 
     @Override
