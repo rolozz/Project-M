@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -41,12 +43,30 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void update(Long id, AccountIdDto accountIdDto) {
-        AccountId accountId = accountIdRepository.findById(id).orElseThrow(() -> (new RuntimeException("not found")));
+    public void update(String username, AccountIdDto accountIdDto) {
+        AccountId accountId =
+                accountIdRepository.findByUsername(username).orElseThrow(() -> (new RuntimeException("not found")));
         if (accountIdDto.getPassword() != null) {
             accountIdDto.setPassword(passwordEncoder.encode(accountIdDto.getPassword()));
         }
         accountIdRepository.save(accountIdMapper.mergeToEntity(accountIdDto, accountId));
+    }
+
+    @Override
+    @Transactional
+    public AccountIdDto findByName(String username){
+        return accountIdMapper.toDto(
+                accountIdRepository
+                        .findByUsername(username)
+                        .orElseThrow(()-> new RuntimeException("empty"))
+        );
+    }
+
+    @Override
+    @Transactional
+    public List<AccountIdDto> findListByNames(List<String> usernames ){
+        List<AccountId> byNames = accountIdRepository.findByUsernameIn(usernames);
+        return accountIdMapper.toDtoList(byNames);
     }
 
     @Override
