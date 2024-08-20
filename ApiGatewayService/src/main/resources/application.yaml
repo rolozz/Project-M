@@ -13,3 +13,21 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 server:
   port: 8081
+
+jwt:
+  secret: 3sR0w8QwX7I5O4U6K1L4V3N2M8T2Y9Q1R2F5G7H1K3J5L0P9S2W7Q8N5R4M3J2
+
+resilience4j.circuitbreaker:
+  instances:
+    userServiceCircuitBreaker:
+      registerHealthIndicator: true
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 10
+      waitDurationInOpenState: 10000
+      failureRateThreshold: 50
+    authServiceCircuitBreaker:
+      registerHealthIndicator: true
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 10
+      waitDurationInOpenState: 10000
+      failureRateThreshold: 50
