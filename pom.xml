@@ -35,6 +35,7 @@
     <module>AuthServer</module>
     <module>UserInfoService</module>
     <module>ApiGatewayService</module>
+    <module>ConfigServer</module>
   </modules>
 
   <dependencies>

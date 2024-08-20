@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/RelationService/pom.xml" />
         <option value="$PROJECT_DIR$/UserInfoService/pom.xml" />
         <option value="$PROJECT_DIR$/ApiGatewayService/pom.xml" />
+        <option value="$PROJECT_DIR$/ConfigServer/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

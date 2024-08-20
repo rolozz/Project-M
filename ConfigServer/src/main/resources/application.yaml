@@ -1,0 +1,12 @@
+server:
+  port: 9297
+
+spring:
+  application:
+   name: ConfigServer
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/rolozz/config-server.git
+          clone-on-start: true
