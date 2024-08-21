@@ -1,9 +1,16 @@
 server:
   port: 9297
 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
 spring:
   application:
-   name: ConfigServer
+    name: ConfigServer
   cloud:
     config:
       server:

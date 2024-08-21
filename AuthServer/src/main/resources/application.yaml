@@ -9,6 +9,11 @@ spring:
     redis:
       host: localhost
       port: 6379
+  cloud:
+    config:
+      uri: http://localhost:9297
+  config:
+      import: "configserver:"
 server:
   port: 8082
   servlet:
@@ -22,3 +27,4 @@ logging:
 jwt:
   secret: 3sR0w8QwX7I5O4U6K1L4V3N2M8T2Y9Q1R2F5G7H1K3J5L0P9S2W7Q8N5R4M3J2
   expiration: 3600000000
+

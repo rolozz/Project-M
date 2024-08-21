@@ -7,6 +7,10 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+    config:
+      uri: http://localhost:9297
+  config:
+    import: "configserver:"
 server:
   port: 8081
 
