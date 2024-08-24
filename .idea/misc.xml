@@ -12,6 +12,9 @@
         <option value="$PROJECT_DIR$/UserInfoService/pom.xml" />
         <option value="$PROJECT_DIR$/ApiGatewayService/pom.xml" />
         <option value="$PROJECT_DIR$/ConfigServer/pom.xml" />
+        <option value="$PROJECT_DIR$/ChatRoomService/pom.xml" />
+        <option value="$PROJECT_DIR$/MessageService/pom.xml" />
+        <option value="$PROJECT_DIR$/NotificationService/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

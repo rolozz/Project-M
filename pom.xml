@@ -36,6 +36,9 @@
     <module>UserInfoService</module>
     <module>ApiGatewayService</module>
     <module>ConfigServer</module>
+    <module>WebSocketService</module>
+    <module>ChatRoomService</module>
+    <module>MessageService</module>
   </modules>
 
   <dependencies>
