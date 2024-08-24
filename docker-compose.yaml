@@ -2,6 +2,16 @@ version: '3.9'
 
 
 services:
+
+#ForAll
+  ZipkinForAll:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      - OPENZIPKIN_BASE_URL=http://localhost:9411
+
 #AuthServer
   AuthServerDB:
     image: postgres:latest

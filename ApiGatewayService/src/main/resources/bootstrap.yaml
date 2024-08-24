@@ -1,5 +1,8 @@
 spring:
+  application:
+    name: ApiGatewayService
+  config:
+    import: "configserver:"
   cloud:
     config:
-      enabled: true
       uri: http://localhost:9296

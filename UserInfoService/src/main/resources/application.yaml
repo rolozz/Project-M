@@ -13,6 +13,11 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+    config:
+      uri: http://localhost:9297
+  config:
+    import: "configserver:"
+
 server:
   port: 8083
   servlet:
