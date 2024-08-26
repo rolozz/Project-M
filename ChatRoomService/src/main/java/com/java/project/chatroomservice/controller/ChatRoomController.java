@@ -1,6 +1,7 @@
 package com.java.project.chatroomservice.controller;
 
 import com.java.project.chatroomservice.model.ChatRoom;
+import com.java.project.chatroomservice.model.CreateChatRoomRequest;
 import com.java.project.chatroomservice.service.ChatRoomService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,17 @@ public class ChatRoomController {
     }
 
     @PostMapping
-    public ChatRoom createRoom(@RequestBody ChatRoom chatRoom) {
-        return chatRoomService.create(chatRoom);
+    public ChatRoom createRoom(@RequestBody CreateChatRoomRequest createChatRoomRequest) {
+        return chatRoomService.create(createChatRoomRequest);
     }
 
     @DeleteMapping("/{id}")
     public void deleteRoom(@PathVariable Long id) {
         chatRoomService.delete(id);
+    }
+
+    @GetMapping("/exists/{roomId}")
+    public boolean roomExists(@PathVariable Long roomId) {
+        return chatRoomService.existById(roomId);
     }
 }

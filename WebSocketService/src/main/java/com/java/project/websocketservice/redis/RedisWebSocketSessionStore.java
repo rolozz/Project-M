@@ -1,4 +1,4 @@
-package com.java.project.websocketservice.service;
+package com.java.project.websocketservice.redis;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

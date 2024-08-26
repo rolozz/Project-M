@@ -1,6 +1,7 @@
 package com.java.project.chatroomservice.service;
 
 import com.java.project.chatroomservice.model.ChatRoom;
+import com.java.project.chatroomservice.model.CreateChatRoomRequest;
 import com.java.project.chatroomservice.repository.ChatRoomRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,19 @@ public class ChatRoomService {
         return chatRoomRepository.findAll();
     }
 
-    public ChatRoom create(ChatRoom chatRoom) {
+    public ChatRoom create(CreateChatRoomRequest createChatRoomRequest) {
+        ChatRoom chatRoom = ChatRoom.builder()
+                .name(createChatRoomRequest.getRoomName())
+                .build();
+        chatRoom.addParticipant(createChatRoomRequest.getCreatorUserName(), "ADMIN");
         return chatRoomRepository.save(chatRoom);
     }
 
     public void delete(Long id) {
         chatRoomRepository.deleteById(id);
+    }
+
+    public boolean existById(Long id) {
+        return chatRoomRepository.existsById(id);
     }
 }

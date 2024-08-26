@@ -1,4 +1,4 @@
-package com.java.project.websocketservice.model;
+package com.java.project.websocketservice.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

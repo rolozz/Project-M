@@ -1,6 +1,7 @@
 package com.java.project.websocketservice.config;
 
 import com.java.project.websocketservice.handler.ChatWebSocketHandler;
+import com.java.project.websocketservice.interceptor.RoomIdValidationIntercepter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,10 +18,12 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
 
     ChatWebSocketHandler chatWebSocketHandler;
+    RoomIdValidationIntercepter roomIdValidationIntercepter;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatWebSocketHandler, "/ws/chat")
+                .addInterceptors(roomIdValidationIntercepter)
                 .setAllowedOrigins("*");
     }
 }
