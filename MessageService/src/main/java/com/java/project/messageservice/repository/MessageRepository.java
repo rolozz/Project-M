@@ -1,11 +1,11 @@
 package com.java.project.messageservice.repository;
 
-import com.java.project.messageservice.model.Message;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.java.project.messageservice.model.ChatMessage;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface MessageRepository extends JpaRepository<Message, Long> {
+public interface MessageRepository extends MongoRepository<ChatMessage, String> {
 
-    List<Message> findAllByChatRoomId(String chatRoomId);
+    List<ChatMessage> findByChatRoomId(String chatRoomId);
 }

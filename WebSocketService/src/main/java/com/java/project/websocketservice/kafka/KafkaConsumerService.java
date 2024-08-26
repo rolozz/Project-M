@@ -24,7 +24,7 @@ public class KafkaConsumerService {
     ObjectMapper objectMapper;
     RedisWebSocketSessionStore redisWebSocketSessionStore;
 
-    @KafkaListener(topics = "chat-messages", groupId = "websocket-group")
+    @KafkaListener(topics = "processed-messages", groupId = "websocket-group")
     public void listen(String messagePayload) {
         try {
             ChatMessageDto chatMessage = objectMapper.readValue(messagePayload, ChatMessageDto.class);

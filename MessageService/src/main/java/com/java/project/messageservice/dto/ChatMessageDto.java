@@ -1,13 +1,8 @@
-package com.java.project.websocketservice.dto;
+package com.java.project.messageservice.dto;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.Data;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChatMessageDto {
 
     public enum MessageType {

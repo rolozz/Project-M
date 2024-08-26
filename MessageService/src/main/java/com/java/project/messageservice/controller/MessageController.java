@@ -1,6 +1,6 @@
 package com.java.project.messageservice.controller;
 
-import com.java.project.messageservice.model.Message;
+import com.java.project.messageservice.dto.ChatMessageDto;
 import com.java.project.messageservice.service.MessageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class MessageController {
 
     MessageService messageService;
 
-    @GetMapping("/{chatRoomId}")
-    public List<Message> getMessages(@PathVariable String chatRoomId) {
-        return messageService.getMessagesByChatRoom(chatRoomId);
+    @GetMapping("/room/{chatRoomId}")
+    public List<ChatMessageDto> getMessages(@PathVariable String chatRoomId) {
+        return messageService.getMessagesByRoomId(chatRoomId);
     }
 }

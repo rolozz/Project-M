@@ -45,7 +45,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         ChatMessageDto chatMessage = objectMapper.readValue(payload, ChatMessageDto.class);
         String chatRoomId = getChatRoomIdFromSession(session);
         chatMessage.setChatRoomId(chatRoomId);
-        chatMessage.setTimestamp(System.currentTimeMillis());
 
         if (chatMessage.getType() == ChatMessageDto.MessageType.CHAT) {
             chatService.processAndSendMessage(chatMessage);
