@@ -1,5 +1,6 @@
 package com.java.project.chatroomservice.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,14 +23,15 @@ public class ChatRoom {
 
     String name;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "chat_room_id")
     Set<ChatRoomParticipant> participants = new HashSet<>();
 
     public void addParticipant(String username, String role) {
         participants.add(ChatRoomParticipant.builder()
                 .username(username)
                 .role(role)
-                .chatRoom(this)
                 .build());
     }
 

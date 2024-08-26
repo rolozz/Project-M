@@ -2,6 +2,7 @@ package com.java.project.messageservice.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.project.messageservice.dto.ChatMessageDto;
+import com.java.project.messageservice.model.ChatMessage;
 import com.java.project.messageservice.service.MessageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

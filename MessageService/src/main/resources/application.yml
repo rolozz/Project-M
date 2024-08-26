@@ -4,6 +4,7 @@ spring:
       host: localhost
       port: 27017
       database: chatMessagesDb
-
   kafka:
     bootstrap-servers: localhost:9092
+server:
+  port: 8082

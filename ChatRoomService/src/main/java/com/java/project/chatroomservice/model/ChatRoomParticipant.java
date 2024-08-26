@@ -1,5 +1,6 @@
 package com.java.project.chatroomservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,9 +20,5 @@ public class ChatRoomParticipant {
 
     String username;
     String role;
-
-    @ManyToOne
-    @JoinColumn(name = "chat_room_id")
-    ChatRoom chatRoom;
 
 }

@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "chatroom-service", url = "${chatroom.service.url}")
 public interface ChatRoomFeignClient {
 
-    @GetMapping("/api/rooms/exists/{roomId}")
+    @GetMapping("/chatrooms/exists/{roomId}")
     boolean roomExists(@PathVariable("roomId") String roomId);
 }

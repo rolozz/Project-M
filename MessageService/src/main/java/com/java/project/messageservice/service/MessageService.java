@@ -25,6 +25,7 @@ public class MessageService {
         ChatMessage message = chatMessageMapper.toEntity(messageDto);
         messageRepository.save(message);
         log.info("Saved message: {}", message);
+        log.info("Saving message for chatRoomId: {}", message.getChatRoomId());
     }
 
     public List<ChatMessageDto> getMessagesByRoomId(String roomId) {
