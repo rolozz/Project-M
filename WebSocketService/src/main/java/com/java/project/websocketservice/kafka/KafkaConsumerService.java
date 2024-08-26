@@ -30,12 +30,23 @@ public class KafkaConsumerService {
             ChatMessageDto chatMessage = objectMapper.readValue(messagePayload, ChatMessageDto.class);
             String chatRoomId = chatMessage.getChatRoomId();
 
-            Set<String> sessionIds = redisWebSocketSessionStore.getSessionIdsByRoomId(chatRoomId);
+            Set<String> sessionIds = redisWebSocketSessionStore.getLocalSessionIdsByRoomId(chatRoomId);
+            boolean sessionExistsLocally = sessionIds != null && !sessionIds.isEmpty();
 
-            for (String sessionId : sessionIds) {
-                WebSocketSession session = redisWebSocketSessionStore.getSession(sessionId);
-                if (session != null && session.isOpen()) {
-                    session.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));
+            if (sessionExistsLocally) {
+                for (String sessionId : sessionIds) {
+                    WebSocketSession session = redisWebSocketSessionStore.getSession(sessionId);
+                    if (session != null && session.isOpen()) {
+                        session.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));
+                    }
+                }
+            } else {
+                sessionIds = redisWebSocketSessionStore.getSessionIdsByRoomId(chatRoomId);
+                for (String sessionId : sessionIds) {
+                    WebSocketSession session = redisWebSocketSessionStore.getSession(sessionId);
+                    if (session != null && session.isOpen()) {
+                        session.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));
+                    }
                 }
             }
         } catch (Exception e) {
