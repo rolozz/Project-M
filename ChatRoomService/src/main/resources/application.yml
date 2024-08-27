@@ -1,6 +1,8 @@
 server:
   port: 8085
 spring:
+  application:
+    name: ChatRoomService
   datasource:
     url: jdbc:postgresql://localhost:5432/mydatabase
     username: myuser

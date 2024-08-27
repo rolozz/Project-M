@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: MessageService
   data:
     mongodb:
       host: localhost
