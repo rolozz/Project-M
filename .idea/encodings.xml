@@ -3,11 +3,15 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/ApiGatewayService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/AuthServer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ChatRoomService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ConfigServer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/EurekaServer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/GatewayService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MessageService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/NotificationService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RelationService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserInfoService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/WebSocketService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

@@ -1,0 +1,12 @@
+spring:
+  data:
+    redis:
+     host: localhost
+     port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+chatroom:
+  service:
+    url: http://localhost:8081
+server:
+  port: 8083
