@@ -1,7 +1,7 @@
 package com.java.project.websocketservice.config;
 
-import com.java.project.websocketservice.handler.ChatWebSocketHandler;
-import com.java.project.websocketservice.interceptor.RoomIdValidationIntercepter;
+import com.java.project.websocketservice.util.handler.ChatWebSocketHandler;
+import com.java.project.websocketservice.util.interceptor.RoomIdValidationIntercepter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

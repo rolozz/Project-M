@@ -1,9 +1,8 @@
-package com.java.project.messageservice.kafka;
+package com.java.project.messageservice.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.project.messageservice.dto.ChatMessageDto;
-import com.java.project.messageservice.model.ChatMessage;
-import com.java.project.messageservice.service.MessageService;
+import com.java.project.messageservice.service.KafkaConsumerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,12 +14,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class KafkaConsumerService {
+public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
     ObjectMapper objectMapper;
-    MessageService messageService;
-    KafkaProducerService kafkaProducerService;
+    MessageServiceImpl messageService;
+    KafkaProducerServiceImpl kafkaProducerService;
 
+    @Override
     @KafkaListener(topics = "client-messages", groupId = "message-service-group")
     public void listen(String messagePayload) {
         try {

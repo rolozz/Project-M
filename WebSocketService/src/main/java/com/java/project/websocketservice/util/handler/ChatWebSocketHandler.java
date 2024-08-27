@@ -1,9 +1,9 @@
-package com.java.project.websocketservice.handler;
+package com.java.project.websocketservice.util.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.project.websocketservice.dto.ChatMessageDto;
-import com.java.project.websocketservice.redis.RedisWebSocketSessionStore;
-import com.java.project.websocketservice.service.ChatService;
+import com.java.project.websocketservice.service.RedisWebSocketSessionStoreService;
+import com.java.project.websocketservice.service.impl.ChatServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,8 +21,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     ObjectMapper objectMapper;
-    RedisWebSocketSessionStore redisWebSocketSessionStore;
-    ChatService chatService;
+    RedisWebSocketSessionStoreService redisWebSocketSessionStore;
+    ChatServiceImpl chatService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

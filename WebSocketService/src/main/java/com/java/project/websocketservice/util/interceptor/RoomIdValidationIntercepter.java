@@ -1,4 +1,4 @@
-package com.java.project.websocketservice.interceptor;
+package com.java.project.websocketservice.util.interceptor;
 
 import com.java.project.websocketservice.client.ChatRoomFeignClient;
 import lombok.AccessLevel;

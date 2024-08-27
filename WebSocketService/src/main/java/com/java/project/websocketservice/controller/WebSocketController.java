@@ -1,6 +1,6 @@
 package com.java.project.websocketservice.controller;
 
-import com.java.project.websocketservice.redis.RedisWebSocketSessionStore;
+import com.java.project.websocketservice.service.RedisWebSocketSessionStoreService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class WebSocketController {
 
-    RedisWebSocketSessionStore sessionStore;
+    RedisWebSocketSessionStoreService sessionStore;
 
     @GetMapping("/sessions/count")
     public String getStatus() {
