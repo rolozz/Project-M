@@ -1,6 +1,4 @@
 spring:
-  sleuth:
-    enabled: false
   data:
     redis:
      host: localhost
